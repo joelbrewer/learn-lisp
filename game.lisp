@@ -43,4 +43,30 @@
         (t '(you cannot get that.))))
 (defun inventory ()
   (cons 'items- (objects-at 'body *objects* *object-locations*)))
-(look)
+
+(defun ask-age  ()
+  (princ "What is your age?")
+  (let ((age (read)))
+    (princ age)
+    (princ " is the perfect age!")))
+
+(defun say-hello ()
+  (princ "Please type your name:")
+  (let ((name (read-line)))
+    (princ "Nice to meet you, ")
+    (princ name)))
+
+(defparameter *foo* '(+ 1 2))
+
+(defun game-repl ()
+  (let ((cmd (game-read)))
+    (unless (eq (car cmd) 'quit)
+      (game-print (game-eval cmd))
+      (game-repl))))
+
+(defun game-read ()
+  (let ((cmd (read-from-string
+               (concatenate 'string "(" (read-line) ")"))))
+    (flet ((quote-it (x)
+                     (list 'quote x)))
+      (cons (car cmd) (mapchar #'quote-it (cdr cmd))))))
